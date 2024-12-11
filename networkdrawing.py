@@ -2,7 +2,7 @@ import networkx as nx
 import numpy as np
 from matplotlib import pyplot as plt
 
-def draw_network(markov_matrix):
+def draw_network(markov_matrix, prefix, stderr):
     num_states = len(markov_matrix)
     # Create a directed graph
     G = nx.DiGraph()
@@ -23,8 +23,8 @@ def draw_network(markov_matrix):
     pos = nx.circular_layout(G)
 
 
-    lbls_from = {(i, j): f'{G[i][j]["weight"]*100:.2f}%' for i, j in G.edges if i<j}
-    lbsl_to = {(i, j): f'{G[i][j]["weight"]*100:.2f}%' for i, j in G.edges if i>j}
+    lbls_from = {(i, j): f'{G[i][j]["weight"]*100:.2f}%\n({stderr[i,j]*100:.2f}%)' for i, j in G.edges if i<j}
+    lbsl_to = {(i, j): f'{G[i][j]["weight"]*100:.2f}%\n({stderr[i,j]*100:.2f}%)' for i, j in G.edges if i>j}
     lbls = {**lbls_from, **lbsl_to}
 
 
@@ -37,12 +37,12 @@ def draw_network(markov_matrix):
 
     G = nx.relabel_nodes(G, {0: 'Authoritarian', 1: 'Middle', 2: 'Democratic'})
     pos = nx.circular_layout(G)
-    ax.set_title('Markov Chain of movements between different regiems')
     nx.draw(G, pos, with_labels=True,node_size=7000, node_color='skyblue', font_size=10, font_weight='bold', 
             width=[G[i][j]['weight']*150 for i, j in G.edges],connectionstyle='arc3,rad=0.4', arrowsize=50, 
             edge_color = colors, ax = ax)
-
+    ax.set_title(f"Markov Network_{prefix}")
     fig.show()
+    fig.savefig(f'results/markov_network {prefix}.png')
     
 
 
@@ -61,3 +61,4 @@ def add_labels(G, lbls, params,ax, pos):
             bbox=dict(facecolor='none', edgecolor='none'), 
             horizontalalignment='left')
         
+

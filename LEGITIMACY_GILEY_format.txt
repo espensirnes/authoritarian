@@ -1,0 +1,93 @@
+Denmark	7.72	7.62	8.20
+Norway	7.29	7.61	8.10
+Netherlands	6.87	7.13	7.28
+Canada	7.00	7.03	7.57
+Austria	6.88	7.00	7.30
+Finland	6.86	6.98	7.41
+Sweden	6.81	6.93	7.01
+United States	6.72	6.82	7.12
+Azerbaijan	6.08	6.78	5.99
+Germany	6.53	6.68	7.23
+Belgium	6.76	6.64	5.67
+Taiwan	6.58	6.62	6.31
+China	6.21	6.58	8.50
+Ireland	6.73	6.48	7.78
+Portugal	6.27	6.39	6.52
+Australia	6.73	6.38	5.43
+Spain	6.26	6.28	6.33
+Britain	6.22	6.28	6.39
+South Africa	6.22	6.24	6.17
+Uruguay	6.00	5.94	4.22
+Italy	6.24	5.90	4.59
+Chile	5.58	5.81	5.55
+New Zealand	6.09	5.69	4.32
+Switzerland	5.28	5.68	6.17
+Tanzania	5.49	5.67	8.27
+Philippines	5.99	5.66	6.71
+Japan	5.50	5.62	4.54
+Bangladesh	5.63	5.58	7.69
+Nigeria	5.82	5.56	6.66
+South Korea	5.28	5.45	5.36
+Czech Republic	5.18	5.28	3.70
+Morocco	4.79	5.25	4.88
+France	5.29	5.24	5.69
+Poland	4.76	5.23	4.90
+Greece	5.28	5.22	4.06
+Hungary	5.05	5.21	4.57
+Brazil	5.46	5.19	4.06
+Indonesia	5.57	5.05	5.28
+Uganda	5.42	5.05	7.33
+Egypt	5.01	5.01	8.64
+Jordan	5.01	4.99	8.39
+Slovenia	4.72	4.93	3.90
+Estonia	4.35	4.88	3.91
+Iran	5.01	4.72	6.67
+Venezuela	4.22	4.66	4.37
+Slovakia	4.87	4.62	3.33
+Croatia	4.82	4.62	3.38
+Algeria	5.27	4.48	4.93
+India	4.69	4.46	5.89
+Belarus	3.95	4.41	3.07
+Moldova	3.92	4.33	2.45
+El Salvador	3.93	4.27	4.98
+Latvia	4.08	4.16	4.07
+Bulgaria	4.00	4.07	2.86
+Argentina	3.89	4.03	1.98
+Ukraine	3.85	4.02	1.94
+Romania	3.69	3.92	2.38
+Serbia/Yugoslavia	3.97	3.89	3.94
+Zimbabwe	3.96	3.82	4.12
+Mexico	3.44	3.55	2.72
+Bosnia Herzegovina	3.40	3.54	3.56
+Turkey	4.30	3.39	3.32
+Albania	3.54	3.27	4.23
+Lithuania	2.82	3.22	1.81
+Peru	3.28	3.13	2.61
+Macedonia	3.01	2.97	1.83
+Colombia	3.15	2.95	4.11
+Georgia	3.02	2.90	3.52
+Dominican Republic	2.35	2.86	0.89
+Armenia	2.73	2.83	2.42
+Pakistan	2.62	2.41	3.30
+Russia	2.41	2.27	1.49
+Denmark	7.72	7.62	8.20
+Norway	7.29	7.61	8.10
+Netherlands	6.87	7.13	7.28
+Canada	7.00	7.03	7.57
+Austria	6.88	7.00	7.30
+Finland	6.86	6.98	7.41
+Sweden	6.81	6.93	7.01
+United States	6.72	6.82	7.12
+Germany	6.53	6.68	7.23
+Belgium	6.76	6.64	5.67
+Ireland	6.73	6.48	7.78
+Portugal	6.27	6.39	6.52
+Australia	6.73	6.38	5.43
+Spain	6.26	6.28	6.33
+Britain	6.22	6.28	6.39
+Italy	6.24	5.90	4.59
+New Zealand	6.09	5.69	4.32
+Switzerland	5.28	5.68	6.17
+France	5.29	5.24	5.69
+Greece	5.28	5.22	4.06
+

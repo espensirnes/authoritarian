@@ -12,11 +12,21 @@ import markov
 import montecarlo as mt
 
 
+from scipy import stats
+
+
+
+
 def main():
     df = handle_data()
+    sim()
+    analyze_structure(df)
     #res = OLS(df, X)
+
     pres = panel_reg(df)
-    plotting(df, pres)
+    
+    
+    
     t0, t1  = mesh(df, 'ifhpol')
     markov_matrix, tr, t = markov.markov(df, [t0,t1], 'ifhpol')
     mean, std = mt.monte_carlo(df, 1000, [1/3,2/3], 'ifhpol')
@@ -28,23 +38,36 @@ def main():
     markov.save_transitions(df)
     #res = OLS(df, X)
 
+def analyze_structure(df):
+    df[(df['ifhpol']<4)*(df['ifhpol_D']<-1)][[f'ifhpol_L{i}' for i in range(16)]].mean().plot(kind='bar')
+    t_stat, p_value = stats.ttest_rel(df['ifhpol'], df['ifhpol_L9'])
+    print("t-statistic:", t_stat)
+    print("p-value:", p_value)
 
+    a=0
 
-def plotting(df, res):
-    df = df[['normalized_rank', 'change_pred']]
-    df = df.sort_values('normalized_rank')
-    df.plot('normalized_rank', 'change_pred')
+def plotting(df, res, measure, coefs, deduct, interval):
+    df['change_pred']  = res.predict()['in-sample predicted Y']
+
+    fig, ax = plt.subplots()
+
+    for test, heading in [[df['year']<1991, 'Pre cold war'], 
+                 [df['year']>=1991, 'Post cold war']]:
+        df_sub = df[test]
+        df_sub = df_sub[[measure, 'change_pred']]
+        df_sub = df_sub.sort_values(measure)
+        df_sub.plot(measure, 'change_pred', ax = ax, label=heading)
     plt.show()
-    x = np.linspace(0,1,100)
-    a = res.ll.args.args_d
-    plt.plot(x,a['beta'][1,0]+ a['beta'][2,0]*np.abs(x-0.5)**2)
+    x = np.linspace(*interval,100)
+    plt.plot(x,coefs[0] + coefs[1]*x+ coefs[2]*np.abs(x-deduct)**2)
     plt.title('prediction of normalized_rank and normalized_rank_sq only')
     plt.show()
     a=0
     
 def handle_data():
     df = pd.read_csv("datasimplified.csv")
-    df = get_annual_rank(df)
+    df = create_annual_rank(df)
+    df = create_lags(df)
 
     df = pd.DataFrame(df)
     df['normalized_rank_sq'] = np.abs(df['normalized_rank']-0.5)**2
@@ -58,13 +81,116 @@ def panel_reg(df=None):
     pt.options.fixed_random_group_eff.set(2)
     pt.options.tolerance.set(0.000001)
     
-    res = pt.execute('abs_one_year_change~normalized_rank+normalized_rank_sq+semidemdummy+demdummy', df, 
+    if False:#abandoned using rank
+        res = pt.execute('abs_one_year_change~normalized_rank+normalized_rank_sq+semidemdummy+demdummy', df, 
+                ID = 'country', T = 'year'
+                )
+        print(res)
+        a = res.ll.args.args_names
+        plotting(df, res, 'normalized_rank', 
+                [a['Intercept'] + a['demdummy'] +a['semidemdummy'], 
+                a['normalized_rank'], a['normalized_rank_sq']], 
+                0.5, [0,1])
+
+
+    res = pt.execute('np.abs(ifhpol_D)~ (year<1991) +ifhpol + ifhpol**2 + (ifhpol>5) +(ifhpol==10)', df, 
                ID = 'country', T = 'year'
                )
     print(res)
-    df['change_pred']  = res.predict()['in-sample predicted Y']
+    a = res.ll.args.args_names
+    plotting(df, res,'ifhpol',
+              [a['(ifhpol==10)'] +a['(ifhpol>5)'] + a['Intercept'] , 
+                a['ifhpol'], a['ifhpol**2']], 
+             0, [0,10])
+
+    #replication of chris:
+    res = pt.execute('totdurny2~ ifhpol + ifhpol**2 + ifhpol**3', df, 
+               ID = 'country', T = 'year'
+               )
+    print(res)
+    res_dd = pt.execute('np.abs(ifhpol_D)~(year<1991) +ifhpol + ifhpol**2 + ifhpol_DD_L1+ifhpol_DD_L2  + (ifhpol>5) +(ifhpol==10)', df, 
+               ID = 'country', T = 'year'
+               )
+    print(res_dd)
+    pt.options.pqdkm.set([4,0,0,0,1])
+    res_arma = pt.execute('ifhpol_D', df, 
+               ID = 'country', T = 'year'
+               )
+    print(res_arma)
+    
     return res
     
+
+def generate_paths(N, T, s, M):
+    # Initialize the paths array with zeros. The first dimension is time, the second is the path index.
+    # Start all paths at M/2 to ensure they're within the interval [0, M] at the start.
+
+    paths = np.zeros((T, N))
+    paths[0] = np.random.rand(N)*10
+
+    
+    for t in range(1,T):
+
+        innovations = np.random.normal(0, s, N)
+        paths[t] = np.clip(paths[t-1] + innovations, 0, M)
+        
+    country =  np.array([[f'Country {i}']*T for i in range(N)]).T
+    year =  np.array([[1960+i]*T for i in range(N)]).T
+    data = {'country': country.flatten(), 'ifhpol':paths.flatten(), 'year':year.flatten(), 'totdurny2':gen_totdurney(N,T, paths)}
+    df = pd.DataFrame(data)
+    df = df.sort_values(['country', 'year'])
+    return df
+
+def gen_totdurney(N,T, paths):
+    P_CHANGE = 0.28
+    a=0
+    fpaths = P_CHANGE*(40*paths - 4*paths**2)
+    fpaths = fpaths*np.mean(paths)/np.mean(fpaths)
+
+    while np.sum(a)==0:
+        a = np.cumsum(np.random.rand(N,T)<fpaths.T*P_CHANGE/T,1)
+    b = np.zeros((N,T))
+    k=0
+    while np.sum(b==0)>0:
+        for i in range(len(a)):
+            b[i][a[i]==k]=np.sum(a[i]==k)
+        k+=1
+    return b.T.flatten()
+
+
+def sim():
+    df = generate_paths(190,40, 1, 10)
+
+
+    grouped = df.groupby('country')
+    df['ifhpol_D'] = grouped['ifhpol'].diff()
+    for i in range(16):
+        df[f'ifhpol_L{i}'] = grouped['ifhpol'].shift(i)
+    df = df.dropna()
+
+
+    analyze_structure(df)
+
+
+
+    res = pt.execute('np.abs(ifhpol_D)~ ifhpol + ifhpol**2 ', df, 
+               ID = 'country', T = 'year'
+               )
+    print(res)
+    a = res.ll.args.args_names
+    plotting(df, res,'ifhpol',
+            [a['Intercept'] , 
+            a['ifhpol'], a['ifhpol**2']], 
+            0, [0,10])
+        #replication of chris:
+    res = pt.execute('totdurny2~ ifhpol + ifhpol**2 + ifhpol**3', df, 
+               ID = 'country', T = 'year'
+               )
+    print(res)
+
+    t0, t1  = mesh(df, 'ifhpol')
+    markov_matrix, tr, t = markov.markov(df, [t0,t1], 'ifhpol')
+    a=0
     
 def OLS(df, X):
     X = sm.add_constant(df[['normalized_rank', 'normalized_rank_sq', 'semidemdummy', 'demdummy']])
@@ -74,7 +200,7 @@ def OLS(df, X):
     print(results.summary()) 
     return results
 
-def get_annual_rank(df):
+def create_annual_rank(df):
     df = pd.DataFrame(df)
     df = df.dropna()
     df = df.sort_values(['year', 'ifhpol'])
@@ -93,20 +219,29 @@ def get_annual_rank(df):
 
     df = df.sort_values(['country', 'year'])
 
-    grouped = df.groupby('country')
+    return df
 
+def create_lags(df):
     # Calculate the one-year change in the 'variable' column
-    df['rank_from'] = df['rank'].shift(1)
-    df['ifhpol_from'] = df['ifhpol'].shift(1)
-    df['totdurny2_from'] = df['totdurny2'].shift(1)
+    grouped = df.groupby('country')
+    df['rank_L1'] = df['rank'].shift(1)
+    df['ifhpol_L1'] = df['ifhpol'].shift(1)
+    df['totdurny2_L1'] = df['totdurny2'].shift(1)
     df['abs_one_year_change'] = np.abs(grouped['normalized_rank'].diff())
-    df['normalized_rank_from'] = df['rank_from'] / df['max_rank']
+    df['ifhpol_D'] = grouped['ifhpol'].diff()
+    df['ifhpol_DD'] = grouped['ifhpol_D'].diff()
+    df['ifhpol_DD_L1'] = grouped['ifhpol_DD'].shift(1)
+    df['ifhpol_DD_L2'] = grouped['ifhpol_DD'].shift(2)
+    for i in range(10):
+        df[f'ifhpol_D_L{i}'] = grouped['ifhpol_D'].shift(i)
+    for i in range(16):
+        df[f'ifhpol_L{i}'] = grouped['ifhpol'].shift(i)
+    df['normalized_rank_L1'] = df['rank_L1'] / df['max_rank']
 
-    # Drop the first row for each group as it will have a NaN value for the change
+    # Drop the first row for each group as it will have a NaN value for the changes
     df = df.dropna()
     # Print the resulting DataFrame
     return df
-
 
 def mesh(df, name):
     d = {}

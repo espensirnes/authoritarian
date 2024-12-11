@@ -1,8 +1,6 @@
 import pandas as pd
 
-from scipy.optimize import minimize
 import numpy as np
-from matplotlib import pyplot as plt
 import paneltime as pt
 import statsmodels.api as sm
 import pickle
@@ -89,13 +87,16 @@ def set_fmt(ws, property, fmt, row, col, endrow = None, endcol = None):
 def markov(df, thresholds, varname):
     gs = []
     n = len(thresholds) +1
+    #scaling:
     thresholds = np.array(thresholds)*np.max(df[varname])
+    #includes boundaries
     thresholds = [0] + list(thresholds) + [np.inf]
+    #creates a column of lower and a column of upper threashold for each group (rows)
     thresholds = np.column_stack((thresholds, np.roll(thresholds, -1)))[:-1]
     m = np.zeros((n,n))
     markov = np.zeros((n,n))
     for i, (t0,t1) in enumerate(thresholds):
-        g = df[(df[varname]>=t0)&(df[varname]<t1)][varname + '_from']
+        g = df[(df[varname]>=t0)&(df[varname]<t1)][varname + '_L1']
         gs.append(g)
 
         for j, (to_t0, to_t1) in enumerate(thresholds):
@@ -106,3 +107,14 @@ def markov(df, thresholds, varname):
 
 
     
+def print_table(markov, stderr, heading):
+    s = heading + "\n\t"
+    s += '\t'*int(len(markov[0])*0.5) +'to \n'
+    
+    for i in range(len(markov)):
+        if i==int(len(markov)*0.5):
+            s += 'from'
+        s += '\t' + '\t'.join(f"{markov[i,j]*100:.2f}%" for j in range(len(markov[i])))+ "\n"
+        s += '\t' + '\t'.join(f"({stderr[i,j]*100:.2f}%)" for j in range(len(markov[i])))+ "\n"
+    print(s)
+    return s

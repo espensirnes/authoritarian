@@ -1,0 +1,52 @@
+Azerbaijan	6.08	6.78	5.99Post-communist Europe
+Czech Republic	5.18	5.28	3.70Post-communist Europe
+Poland	4.76	5.23	4.90Post-communist Europe
+Hungary	5.05	5.21	4.57Post-communist Europe
+Slovenia	4.72	4.93	3.90Post-communist Europe
+Estonia	4.35	4.88	3.91Post-communist Europe
+Slovakia	4.87	4.62	3.33Post-communist Europe
+Croatia	4.82	4.62	3.38Post-communist Europe
+Belarus	3.95	4.41	3.07Post-communist Europe
+Moldova	3.92	4.33	2.45Post-communist Europe
+Latvia	4.08	4.16	4.07Post-communist Europe
+Bulgaria	4.00	4.07	2.86Post-communist Europe
+Ukraine	3.85	4.02	1.94Post-communist Europe
+Romania	3.69	3.92	2.38Post-communist Europe
+Serbia/Yugoslavia	3.97	3.89	3.94Post-communist Europe
+Bosnia Herzegovina	3.40	3.54	3.56Post-communist Europe
+Albania	3.54	3.27	4.23Post-communist Europe
+Lithuania	2.82	3.22	1.81Post-communist Europe
+Macedonia	3.01	2.97	1.83Post-communist Europe
+Georgia	3.02	2.90	3.52Post-communist Europe
+Armenia	2.73	2.83	2.42Post-communist Europe
+Russia	2.41	2.27	1.49Post-communist Europe
+Uruguay	6.00	5.94	4.22Latin America
+Chile	5.58	5.81	5.55Latin America
+Brazil	5.46	5.19	4.06Latin America
+Venezuela	4.22	4.66	4.37Latin America
+El Salvador	3.93	4.27	4.98Latin America
+Argentina	3.89	4.03	1.98Latin America
+Mexico	3.44	3.55	2.72Latin America
+Peru	3.28	3.13	2.61Latin America
+Colombia	3.15	2.95	4.11Latin America
+Dominican Republic	2.35	2.86	0.89Latin America
+Morocco	4.79	5.25	4.88Middle East/North Africa
+Egypt	5.01	5.01	8.64Middle East/North Africa
+Jordan	5.01	4.99	8.39Middle East/North Africa
+Iran	5.01	4.72	6.67Middle East/North Africa
+Algeria	5.27	4.48	4.93Middle East/North Africa
+Turkey	4.30	3.39	3.32Middle East/North Africa
+Pakistan	2.62	2.41	3.30Middle East/North Africa
+South Africa	6.22	6.24	6.17Sub-Saharan Africa
+Tanzania	5.49	5.67	8.27Sub-Saharan Africa
+Nigeria	5.82	5.56	6.66Sub-Saharan Africa
+Uganda	5.42	5.05	7.33Sub-Saharan Africa
+Zimbabwe	3.96	3.82	4.12Sub-Saharan Africa
+Taiwan	6.58	6.62	6.31Sub-Saharan Africa
+China	6.21	6.58	8.50Sub-Saharan Africa
+Philippines	5.99	5.66	6.71Sub-Saharan Africa
+Japan	5.50	5.62	4.54Sub-Saharan Africa
+Bangladesh	5.63	5.58	7.69Sub-Saharan Africa
+South Korea	5.28	5.45	5.36Sub-Saharan Africa
+Indonesia	5.57	5.05	5.28Sub-Saharan Africa
+India	4.69	4.46	5.89Sub-Saharan Africa
